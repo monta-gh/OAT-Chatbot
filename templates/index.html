@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>OAT Chatbot</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            height: 100vh;
+            margin: 0;
+            padding: 2em;
+            background-color: #e6f2ff;
+        }
+
+        h1 {
+            margin-bottom: 1em;
+        }
+
+        form {
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            background: #f9f9f9;
+            padding: 1.5em;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 1em; /* 下マージンを追加して調整 */
+        }
+
+        textarea {
+            width: 100%;
+            padding: 0.5em;
+            font-size: 1em;
+        }
+
+        .button-group {
+            margin-top: 1em;
+            display: flex;
+            justify-content: center;
+            gap: 1em;
+        }
+
+        input[type="submit"],
+        button[type="button"] {
+            padding: 0.5em 1.5em;
+            font-size: 1em;
+            background-color: #0077cc;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover,
+        button[type="button"]:hover {
+            background-color: #005fa3;
+        }
+
+        h2 {
+            margin-top: 1em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1em;
+        }
+
+        .history-block {
+            width: 100%;
+            max-width: 600px;
+            background: white;
+            padding: 1em;
+            margin-top: 1em;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .clear-form {
+            background-color: #888;
+        }
+
+        .clear-form:hover {
+            background-color: #555;
+        }
+
+        .clear-session {
+            padding: 0.5em 1.5em;
+            font-size: 1em;
+            background-color: #0077cc;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .clear-session:hover {
+            background-color: #005fa3;
+        }
+
+        .history-header {
+        display: flex;
+        justify-content: flex-end;
+        margin: 0; /* ← ここがポイント */
+        padding: 0;
+        }
+
+        .history-header form {
+        margin: 0;
+        padding: 0;
+        text-align: right;
+        width: 100%;
+        }
+
+        p {
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>OAT Chatbot</h1>
+
+    <form method="POST">
+        <label for="question">わたしは小川鍼灸治療院のブログから生まれたAIチャットロボです。何でも話しかけてください。</label><br><br>
+        <textarea name="question" id="question" rows="4" cols="50" required>{{ question or '' }}</textarea>
+
+        <div class="button-group">
+            <input type="submit" value="送信">
+            <button type="button" class="clear-form" onclick="document.getElementById('question').value = ''">入力をクリア</button>
+        </div>
+    </form>
+
+    {% if history %}
+    <div class="history-block">
+        <div class="history-header">
+            <form method="POST" action="/clear" class="clear-form-container">
+                <button type="submit" class="clear-session">履歴をクリア</button>
+            </form>
+        </div>
+        {% for item in history %}
+            <p><strong>質問：</strong>{{ item.question }}</p>
+            <p><strong>回答：</strong>{{ item.answer }}</p>
+            <hr>
+        {% endfor %}
+    </div>
+    {% endif %}
+</body>
+</html>
