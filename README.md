@@ -1,67 +1,71 @@
 # OAT-Chatbot
 
-OAT-Chatbot は、小川鍼灸治療院の院長による約4年間のブログをベースに構築された、検索特化型のAIチャットボットです。\
-ユーザーの質問に対し、過去のブログ記事の内容をベクトル検索とキーワード検索を組み合わせて参照し、正確かつ自然な日本語応答を生成します。
+**OAT-Chatbot** is a retrieval-focused AI chatbot built upon approximately four years of blog content authored by the head of Ogawa Acupuncture Therapy.  
+It answers user questions by combining vector and keyword search to reference relevant past blog posts and generate accurate, natural-sounding responses in Japanese.
 
 ---
 
-## 📚 機能概要
+## 📚 Features
 
-- **RAG【Retrieval-Augmented Generation】構成**：OpenAIの埋め込みモデルとChromaDBを利用して、意味ベースで関連情報を検索
-- **高精度な回答生成**：検索結果（上位文書）をプロンプトに埋め込み、GPT-4o-mini によって140〜170文字の回答を生成
-- **ハイブリッド検索**：ベクトル検索とキーワード検索を並行利用し、検索精度と網羅性を両立
-- **出典の明示**：ベクトル検索とキーワード検索の結果を回答とともに表示
-- **チャット履歴機能**：セッションごとに最大10件の履歴を保存・表示
-- **UI機能**：キーワード検索結果の「もっと見る」表示、履歴クリアボタンなど
+- **RAG (Retrieval-Augmented Generation)** architecture using OpenAI's embedding model and ChromaDB for semantic search
+- **High-precision answers** generated using GPT-4o-mini with top-ranked search results embedded in the prompt (140–170 characters per answer)
+- **Hybrid search mechanism** combining vector and keyword search to enhance both precision and coverage
+- **Citation display**: Sources retrieved via both search methods are shown alongside the answers
+- **Chat history feature**: Stores and displays up to 10 previous messages per session
+- **User interface features**: "Show more" option for keyword search results, and a history clear button
 
 ---
 
-## 🛠 使用技術
+## 🛠 Technologies Used
 
 - Python
 - Flask
-- OpenAI API（GPT-4o-mini）
+- OpenAI API (GPT-4o-mini)
 - ChromaDB
-- janome（日本語形態素解析）
-- HTML + CSS（ミニマルなWebチャットUI）
+- Janome (Japanese morphological analysis)
+- HTML + CSS (minimalist web chat UI)
 
 ---
 
-## 📂 ファイル構成
+## 📂 Project Structure
 
-| ファイル／フォルダ                  | 役割                                   |
-| -------------------------- | ------------------------------------ |
-| `app.py`                   | Flaskアプリ本体。ルーティングとチャット処理を担当          |
-| `chatbot_prompt_module.py` | 質問処理、ベクトル検索、キーワード検索、プロンプト生成ロジック      |
-| `templates/index.html`     | ユーザー向けチャット画面（検索結果や履歴の表示機能付き）         |
-| `chroma_db/`               | 🔒 非公開：ベクトルデータベース（このリポジトリには含まれていません） |
-
----
-
-## 🔐 注意：データベース（chroma\_db）は含まれていません
-
-本リポジトリは構造と実装の参考用として公開されており、実際のブログデータやベクトルデータベース（`chroma_db/`）は含まれていません。\
-これは、元のブログ記事が非公開情報を含むためです。
-
-本リポジトリのコードを利用して再構築するには、独自のテキストデータを用意し、ChromaDB形式でベクトル化・登録する必要があります。
+| File/Folder                | Description                                           |
+|---------------------------|-------------------------------------------------------|
+| `app.py`                  | Core Flask application: handles routing and chat logic |
+| `chatbot_prompt_module.py`| Handles question processing, vector search, keyword search, and prompt generation |
+| `templates/index.html`    | Web chat UI for users, including result and history display |
+| `chroma_db/`              | 🔒 Not included in this repo: vector database folder |
 
 ---
 
-## 🚀 セットアップ方法（開発用）
+## 🔐 Note: `chroma_db/` is not included
+
+This repository is provided for structural and implementation reference only.  
+Actual blog content and vector database (`chroma_db/`) are **not** included, as they contain private information.
+
+To rebuild the chatbot, you will need to prepare your own text dataset and convert it into a ChromaDB-compatible vector database.
+
+---
+
+## 🚀 Setup Instructions (Development)
 
 ```bash
 pip install flask openai chromadb janome
 ```
 
-必要な環境変数（`.env` 等）：
+Required environment variables (e.g., `.env`):
 
 - `OPENAI_API_KEY`
-- `FLASK_SECRET_KEY`（任意）
+- `FLASK_SECRET_KEY` (optional)
 
 ---
 
-## 🧩 課題
+## 🧩 Challenges
 
-RAG構成は強力である一方、検索精度や応答品質を安定させるには工夫が必要です。特に、文書を適切にチャンク化する設計や、意味的に無関係なベクトル検索結果を除外するフィルタ処理が重要であることを、本プロジェクトの開発を通じて実感しました。
+While the RAG architecture is powerful, it requires careful design to ensure stable search accuracy and response quality.  
+Through the development of this project, I realized the importance of:
 
-本課題を踏まえ、今後はデータ構造や検索戦略をより柔軟に設計できる汎用型のRAGチャットボットを目指して改善を進める予定です。
+- Designing appropriate chunking strategies for documents  
+- Filtering out semantically irrelevant results from vector search
+
+In light of these challenges, I plan to continue improving the system toward building a more flexible and general-purpose RAG chatbot by refining its data structure and retrieval strategy.
